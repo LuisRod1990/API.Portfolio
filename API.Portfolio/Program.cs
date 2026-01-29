@@ -7,15 +7,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var corsName = Environment.GetEnvironmentVariable("CorsWeb");
-var corsHost = Environment.GetEnvironmentVariable("CorsWebHost");
+var corsName = Environment.GetEnvironmentVariable("CORS_NAME");
+var corsHost = Environment.GetEnvironmentVariable("CORS_HOST");
 
 // Registrar la política de CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("ApiPortfolioPolicy2", policy =>
+    options.AddPolicy(corsName, policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins(corsHost)
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
@@ -31,8 +31,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "AuthService",
-            ValidAudience = "AuthClients",
+            ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+            ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")))
         };
@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Tienda API",
+        Title = "CV API",
         Version = "v1"
     });
 
@@ -96,7 +96,7 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("ApiPortfolioPolicy2");
+app.UseCors(corsName);
 
 app.MapControllers();
 
