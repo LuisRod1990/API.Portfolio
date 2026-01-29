@@ -6,7 +6,7 @@ WORKDIR /src
 COPY *.sln ./
 
 # Copiar los proyectos (ajusta si tu carpeta es distinta)
-COPY Api.Portfolio/*.csproj Api/Portfolio/
+COPY Api/Portfolio/*.csproj Api/Portfolio/
 
 # Restaurar dependencias
 RUN dotnet restore
