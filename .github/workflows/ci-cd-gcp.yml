@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for .NET 9 API on GCP
+name: CI/CD Pipeline for .NET 8 API on GCP
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
@@ -51,7 +51,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
