@@ -6,7 +6,7 @@ WORKDIR /src
 COPY *.sln ./
 
 # Copiar los proyectos (ajusta si tu carpeta es distinta)
-COPY Api.Portfolio/*.csproj ./
+COPY API.Portfolio/*.csproj ./API.Portfolio/
 
 # Restaurar dependencias
 RUN dotnet restore
@@ -15,7 +15,7 @@ RUN dotnet restore
 COPY . .
 
 # Compilar y publicar el proyecto principal
-WORKDIR /src/Api.Portfolio
+WORKDIR /src/API.Portfolio
 RUN dotnet publish -c Release -o /app/publish
 
 # Etapa de runtime
@@ -27,4 +27,4 @@ COPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "Api.Portfolio.dll"]
+ENTRYPOINT ["dotnet", "API.Portfolio.dll"]
