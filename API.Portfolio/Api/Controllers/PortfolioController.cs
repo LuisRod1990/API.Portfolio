@@ -31,7 +31,6 @@ namespace PortfolioApi.Api.Controllers
             };
             if (!allowed.Contains(sp))
                 return BadRequest("Stored procedure no permitida");
-
             var result = await _mediator.Send(new GetDataByStoredProcedureQuery(sp, usuarioId));
             return Ok(result);
         }
