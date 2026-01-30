@@ -104,3 +104,4 @@ jobs:
             --timeout=600 \
             --add-cloudsql-instances=${{ secrets.CLOUDSQL_INSTANCE }} \
             --set-env-vars "CONN=${{ secrets.CONN }},JWT_KEY=${{ secrets.JWT_KEY}},JWT_ISSUER=${{ secrets.JWT_ISSUER}},JWT_AUDIENCE=${{ secrets.JWT_AUDIENCE}},CORS_NAME=${{ secrets.CORS_NAME}},CORS_HOST=${{ secrets.CORS_HOST}}"
+            
