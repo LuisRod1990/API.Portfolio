@@ -88,13 +88,13 @@ jobs:
       - name: Verify Dockerfile
         run: ls -la .
 
-      - name: Build Docker image
+      - name: Build Docker image (PortfolioService)
         run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolioservice-repo/portfolioservice:latest -f ./Dockerfile .
 
       - name: Push Docker image to Artifact Registry (PortfolioService)
         run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolioservice-repo/portfolioservice:latest
 
-      - name: Deploy to Cloud Run
+      - name: Deploy to Cloud Run (PortfolioService)
         run: |
           gcloud run deploy portfolioservice \
             --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolioservice-repo/portfolioservice:latest \
@@ -102,4 +102,5 @@ jobs:
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
             --timeout=600 \
+            --add-cloudsql-instances=${{ secrets.CLOUDSQL_INSTANCE }} \
             --set-env-vars "CONN=${{ secrets.CONN }},JWT_KEY=${{ secrets.JWT_KEY}},JWT_ISSUER=${{ secrets.JWT_ISSUER}},JWT_AUDIENCE=${{ secrets.JWT_AUDIENCE}},CORS_NAME=${{ secrets.CORS_NAME}},CORS_HOST=${{ secrets.CORS_HOST}}"
