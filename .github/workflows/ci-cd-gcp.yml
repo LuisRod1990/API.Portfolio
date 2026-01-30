@@ -17,7 +17,7 @@ jobs:
       JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
       JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
       JWT_KEY: ${{ secrets.JWT_KEY }}
-      CONN: ${{ secrets.CONNECTION_STRING }}
+      CONN: ${{ secrets.CONN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

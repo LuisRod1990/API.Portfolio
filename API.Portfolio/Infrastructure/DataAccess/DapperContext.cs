@@ -13,6 +13,6 @@ namespace PortfolioApi.Infrastructure.DataAccess
         }
 
         public IDbConnection CreateConnection()
-            => new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            => new SqlConnection(Environment.GetEnvironmentVariable("CONN"));
     }
 }
