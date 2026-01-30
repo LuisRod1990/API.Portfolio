@@ -85,6 +85,15 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
 
+      - name: Ensure Artifact Registry repo exists
+        run: |
+          gcloud artifacts repositories describe portfolioservice-repo \
+            --location=${{ secrets.GCP_REGION }} || \
+          gcloud artifacts repositories create portfolioservice-repo \
+            --repository-format=docker \
+            --location=${{ secrets.GCP_REGION }} \
+            --description="PortfolioService repo"
+
       - name: Verify Dockerfile
         run: ls -la .
 
@@ -102,4 +111,5 @@ jobs:
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
             --timeout=600 \
-            --set-env-vars "CONNECTION_STRING=${{ secrets.CONNECTION_STRING }},JWT_KEY=${{ secrets.JWT_KEY}},JWT_ISSUER=${{ secrets.JWT_ISSUER}},JWT_AUDIENCE=${{ secrets.JWT_AUDIENCE}},CORS_NAME=${{ secrets.CORS_NAME}},CORS_HOST=${{ secrets.CORS_HOST}}"
+            --set-env-vars "CONN=${{ secrets.CONN }},JWT_KEY=${{ secrets.JWT_KEY}},JWT_ISSUER=${{ secrets.JWT_ISSUER}},JWT_AUDIENCE=${{ secrets.JWT_AUDIENCE}},CORS_NAME=${{ secrets.CORS_NAME}},CORS_HOST=${{ secrets.CORS_HOST}}"
+            
