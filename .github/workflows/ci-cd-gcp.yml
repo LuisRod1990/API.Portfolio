@@ -89,15 +89,15 @@ jobs:
         run: ls -la .
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/authservice-repo/authservice:latest -f ./Dockerfile .
+        run: docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolioservice-repo/portfolioservice:latest -f ./Dockerfile .
 
-      - name: Push Docker image to Artifact Registry
-        run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/authservice-repo/authservice:latest
+      - name: Push Docker image to Artifact Registry (PortfolioService)
+        run: docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolioservice-repo/portfolioservice:latest
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy authservice \
-            --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/authservice-repo/authservice:latest \
+          gcloud run deploy portfolioservice \
+            --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolioservice-repo/portfolioservice:latest \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
