@@ -96,7 +96,7 @@ app.UseSwaggerUI(c =>
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors();
+app.UseCors(corsName);
 
 app.MapControllers();
 
