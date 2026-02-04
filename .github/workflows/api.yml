@@ -2,7 +2,7 @@ name: Deploy PortfolioService to EC2
 
 on:
   push:
-    branches: [ "main" ]   # Se ejecuta cuando haces push a la rama main
+    branches: [ "main" ]
 
 jobs:
   build-and-deploy:
@@ -12,8 +12,13 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
 
+    # --- Revisión de código ---
+    - name: Code analysis
+      run: dotnet build --configuration Release /warnaserror
+
+    # --- Construcción de imagen Docker ---
     - name: Build Docker image
-      run: docker build -t portfolioservice:latest .   # Construye la imagen Docker de tu API .NET 9
+      run: docker build -t portfolioservice:latest .
 
     - name: Save Docker image
       run: docker save portfolioservice:latest | gzip > portfolioservice.tar.gz
@@ -27,35 +32,21 @@ jobs:
         source: "portfolioservice.tar.gz"
         target: "/home/ec2-user/"
 
-    - name: Load and run container on EC2 with HTTPS
+    - name: Load and run container on EC2
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          # --- Configuración de Docker ---
           sudo systemctl enable docker
           sudo systemctl start docker
           sudo usermod -aG docker ec2-user
 
-          # --- Instala Nginx y Certbot (si no existen) ---
-          sudo yum install -y nginx
-          sudo amazon-linux-extras enable epel
-          sudo yum install -y certbot python3-certbot-nginx
-
-          # --- Detiene Nginx si ya estaba corriendo ---
-          sudo systemctl stop nginx || true
-
-          # --- Arranca Nginx limpio ---
-          sudo systemctl enable nginx
-          sudo systemctl start nginx
-
-          # --- Carga y corre el contenedor ---
           docker load < /home/ec2-user/portfolioservice.tar.gz
           docker stop portfolioservice || true
           docker rm portfolioservice || true
-          docker run -d --name portfolioservice -p 5001:5001 \
+          docker run -d --restart always --name portfolioservice -p 5001:5001 \
             -e CONN="${{ secrets.CONN }}" \
             -e CORS_HOST="${{ secrets.CORS_HOST }}" \
             -e CORS_NAME="${{ secrets.CORS_NAME }}" \
@@ -64,23 +55,3 @@ jobs:
             -e JWT_KEY="${{ secrets.JWT_KEY }}" \
             -e ASPNETCORE_URLS="http://+:5001" \
             portfolioservice:latest
-
-          # --- Configuración inicial de Nginx (solo HTTP) ---
-          sudo tee /etc/nginx/conf.d/portfolioservice.conf > /dev/null <<EOL
-          server {
-              listen 80;
-              server_name larj-services.duckdns.org;
-
-              location /portfolio {
-                  proxy_pass http://localhost:5001;
-                  proxy_set_header Host \$host;
-                  proxy_set_header X-Real-IP \$remote_addr;
-              }
-          }
-          EOL
-
-          # --- Genera y aplica certificado SSL automáticamente ---
-          sudo certbot --nginx -d larj-services.duckdns.org -m ${{ secrets.SSL_EMAIL }} --agree-tos --non-interactive
-
-          # --- Reinicia Nginx para aplicar cambios ---
-          sudo systemctl restart nginx
