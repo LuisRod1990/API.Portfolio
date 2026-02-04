@@ -7,8 +7,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var corsName = Environment.GetEnvironmentVariable("CORS_NAME");
-var corsHost = Environment.GetEnvironmentVariable("CORS_HOST");
+var connectionString = Environment.GetEnvironmentVariable("CONN") ?? "Defaults";
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? "DefaultKey";
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "DefaultIssuer";
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "DefaultAudience";
+var corsName = Environment.GetEnvironmentVariable("CORS_NAME") ?? "DefaultCors";
+var corsHost = Environment.GetEnvironmentVariable("CORS_HOST") ?? "*";
 
 builder.Services.AddCors(options =>
 {
@@ -30,10 +34,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
-            ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")))
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
 
