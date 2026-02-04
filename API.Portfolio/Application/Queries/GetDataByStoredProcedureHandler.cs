@@ -11,6 +11,19 @@ namespace PortfolioApi.Application.Queries
     {
         private readonly DapperContext _context;
 
+        // Lista blanca de funciones permitidas
+        private readonly HashSet<string> _allowedFunctions = new()
+        {
+            "get_contact",
+            "get_aptitudes",
+             "get_experiencia",
+
+
+            "get_skills"
+                , "get_totalexperiencia"
+                , "get_formacion"
+        };
+
         public GetDataByStoredProcedureHandler(DapperContext context)
         {
             _context = context;
@@ -20,10 +33,14 @@ namespace PortfolioApi.Application.Queries
         {
             using var connection = _context.CreateConnection();
 
-            var result = await connection.QueryAsync(
-                request.StoredProcedure,
-                new { UsuarioId = request.UsuarioId },
-                commandType: CommandType.StoredProcedure);
+            // Validar que la función esté permitida
+            if (!_allowedFunctions.Contains(request.StoredProcedure))
+                throw new ArgumentException($"Función no permitida: {request.StoredProcedure}");
+
+            // Construir el SQL dinámicamente con esquema dbo
+            var sql = $"SELECT * FROM dbo.{request.StoredProcedure}(@UsuarioId);";
+
+            var result = await connection.QueryAsync(sql, new { UsuarioId = request.UsuarioId });
 
             return result;
         }

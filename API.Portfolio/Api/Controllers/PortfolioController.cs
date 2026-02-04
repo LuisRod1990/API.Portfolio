@@ -22,12 +22,14 @@ namespace PortfolioApi.Api.Controllers
         public async Task<IActionResult> GetData(string sp, int usuarioId)
         {
             // Lista blanca de SP permitidos
-            var allowed = new[] { "Get_Contact"
-                , "Get_Aptitudes"
-                , "Get_Skills"
-                , "Get_Experiencia"
-                , "Get_TotalExperiencia"
-                , "Get_Formacion"
+            var allowed = new[] { "get_contact"
+                , "get_aptitudes"
+                , "get_experiencia"
+                , "get_skills"
+
+
+                , "get_totalexperiencia"
+                , "get_formacion"
             };
             if (!allowed.Contains(sp))
                 return BadRequest("Stored procedure no permitida");
