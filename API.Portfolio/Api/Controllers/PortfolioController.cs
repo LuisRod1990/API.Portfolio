@@ -18,6 +18,13 @@ namespace PortfolioApi.Api.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("index")]
+        public IActionResult Register()
+        {
+            return Ok("Success...");
+        }
+
+        [AllowAnonymous]
         [HttpGet("{sp}/{usuarioId}")]
         public async Task<IActionResult> GetData(string sp, int usuarioId)
         {

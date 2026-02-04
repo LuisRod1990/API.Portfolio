@@ -56,6 +56,12 @@ jobs:
           docker stop portfolioservice || true
           docker rm portfolioservice || true
           docker run -d --name portfolioservice -p 5001:5001 \
+            -e CONN="${{ secrets.CONN }}" \
+            -e CORS_HOST="${{ secrets.CORS_HOST }}" \
+            -e CORS_NAME="${{ secrets.CORS_NAME }}" \
+            -e JWT_AUDIENCE="${{ secrets.JWT_AUDIENCE }}" \
+            -e JWT_ISSUER="${{ secrets.JWT_ISSUER }}" \
+            -e JWT_KEY="${{ secrets.JWT_KEY }}" \
             -e ASPNETCORE_URLS="http://+:5001" \
             portfolioservice:latest
 

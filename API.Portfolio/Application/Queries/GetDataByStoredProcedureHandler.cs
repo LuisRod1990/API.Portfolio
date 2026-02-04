@@ -17,9 +17,9 @@ namespace PortfolioApi.Application.Queries
             "get_contact",
             "get_aptitudes",
              "get_experiencia",
-
-
             "get_skills"
+
+
                 , "get_totalexperiencia"
                 , "get_formacion"
         };
