@@ -93,10 +93,10 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty; // esto hace que Swagger quede en "/"
 });
 
+app.UseCors(corsName);
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors(corsName);
 
 app.MapControllers();
 
