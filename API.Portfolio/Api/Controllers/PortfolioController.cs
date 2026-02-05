@@ -24,7 +24,7 @@ namespace PortfolioApi.Api.Controllers
             return Ok("Success...");
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet("{sp}/{usuarioId}")]
         public async Task<IActionResult> GetData(string sp, int usuarioId)
         {
@@ -33,8 +33,6 @@ namespace PortfolioApi.Api.Controllers
                 , "get_aptitudes"
                 , "get_experiencia"
                 , "get_skills"
-
-
                 , "get_totalexperiencia"
                 , "get_formacion"
             };

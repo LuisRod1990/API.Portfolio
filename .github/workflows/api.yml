@@ -55,3 +55,6 @@ jobs:
             -e JWT_KEY="${{ secrets.JWT_KEY }}" \
             -e ASPNETCORE_URLS="http://+:5001" \
             portfolioservice:latest
+            
+            
+            
