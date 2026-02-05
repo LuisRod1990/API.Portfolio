@@ -7,12 +7,20 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var connectionString = Environment.GetEnvironmentVariable("CONN") ?? "Defaults";
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? "DefaultKey";
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "DefaultIssuer";
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "DefaultAudience";
 var corsName = Environment.GetEnvironmentVariable("CORS_NAME") ?? "DefaultCors";
 var corsHost = Environment.GetEnvironmentVariable("CORS_HOST") ?? "*";
+
+if (string.IsNullOrEmpty(jwtKey))
+    throw new InvalidOperationException("JWT key is not configured.");
+
+var key = Encoding.UTF8.GetBytes(jwtKey);
 
 builder.Services.AddCors(options =>
 {
@@ -36,7 +44,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtIssuer,
             ValidAudience = jwtAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+            IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
 
