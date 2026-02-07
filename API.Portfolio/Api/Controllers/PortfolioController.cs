@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PortfolioApi.Api.Controllers
 {
-    [Authorize]
+//    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PortfolioController : ControllerBase
