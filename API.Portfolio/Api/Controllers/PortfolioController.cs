@@ -24,11 +24,9 @@ namespace PortfolioApi.Api.Controllers
             return Ok("Success...");
         }
 
-        [AllowAnonymous]
         [HttpGet("{sp}/{usuarioId}")]
         public async Task<IActionResult> GetData(string sp, int usuarioId)
         {
-            // Lista blanca de SP permitidos
             var allowed = new[] { "get_contact"
                 , "get_aptitudes"
                 , "get_experiencia"
