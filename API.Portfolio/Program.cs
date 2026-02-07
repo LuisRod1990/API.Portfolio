@@ -26,9 +26,21 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(corsName, policy =>
     {
-        policy.WithOrigins()
+        var allowedOrigins = new List<string>
+        {
+            "http://localhost:4200",
+            "https://portfolio-lrguez.duckdns.org"
+        };
+        if (!string.IsNullOrEmpty(corsHost) && corsHost != "*")
+        {
+            allowedOrigins.Add(corsHost);
+        }
+
+        policy.WithOrigins(allowedOrigins.ToArray())
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              // para permitir cookies o Authorization header
+              .AllowCredentials(); 
     });
 });
 
