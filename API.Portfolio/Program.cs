@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(corsName, policy =>
     {
-        policy.WithOrigins("http://localhost:4200", corsHost)
+        policy.WithOrigins("http://localhost:4200", "https://portfolio-lrguez.duckdns.org")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
