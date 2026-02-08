@@ -34,5 +34,7 @@ namespace PortfolioApi.Api.Controllers
             var result = await _mediator.Send(new GetDataByStoredProcedureQuery(sp, usuarioId));
             return Ok(result);
         }
+
+
     }
 }
