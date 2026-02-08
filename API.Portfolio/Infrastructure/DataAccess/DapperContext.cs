@@ -12,7 +12,7 @@ namespace PortfolioApi.Infrastructure.DataAccess
             _config = config;
         }
 
-        // sql
+        // Conexión con SQL Server - descomentar si se usa SQL Server
         //public IDbConnection CreateConnection() => new SqlConnection(Environment.GetEnvironmentVariable("CONN"));
         public IDbConnection CreateConnection()
             => new NpgsqlConnection(Environment.GetEnvironmentVariable("CONN"));
