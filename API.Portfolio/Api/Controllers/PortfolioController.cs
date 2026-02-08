@@ -23,7 +23,7 @@ namespace PortfolioApi.Api.Controllers
         {
             return Ok("Success...");
         }
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet("{sp}/{usuarioId}")]
         public async Task<IActionResult> GetData(string sp, int usuarioId)
         {
