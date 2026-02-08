@@ -1,4 +1,5 @@
 ﻿using API.Portfolio.Application.Queries;
+using API.Portfolio.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +25,9 @@ namespace PortfolioApi.Api.Controllers
             return Ok("Success...");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetData([FromQuery] string sp, [FromQuery] int usuarioId)
+        // POST: api/portfolio
+        [HttpPost]
+        public async Task<IActionResult> GetData([FromBody] StoredProcedureRequest request)
         {
             var allowed = new[]
             {
@@ -37,10 +39,17 @@ namespace PortfolioApi.Api.Controllers
                 "get_formacion"
             };
 
-            if (!allowed.Contains(sp))
-                return BadRequest("Stored procedure no permitida");
+            Console.WriteLine($"Controller: petición recibida con sp={request.Sp}, usuarioId={request.UsuarioId}");
 
-            var result = await _mediator.Send(new GetDataByStoredProcedureQuery(sp, usuarioId));
+            if (!allowed.Contains(request.Sp))
+            {
+                Console.WriteLine("Controller: stored procedure no permitida");
+                return BadRequest("Stored procedure no permitida");
+            }
+
+            var result = await _mediator.Send(new GetDataByStoredProcedureQuery(request.Sp, request.UsuarioId));
+
+            Console.WriteLine("Controller: resultado obtenido del mediator");
             return Ok(result);
         }
 
