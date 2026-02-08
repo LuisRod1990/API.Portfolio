@@ -23,9 +23,9 @@ namespace PortfolioApi.Api.Controllers
         {
             return Ok("Success...");
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetData([FromQuery] string sp, [FromQuery] int usuarioId)
+        
+        [HttpGet("{sp}/{usuarioId}")]
+        public async Task<IActionResult> GetData(string sp, int usuarioId)
         {
             var allowed = new[] { "get_contact", "get_aptitudes", "get_experiencia", "get_skills", "get_totalexperiencia", "get_formacion" };
             if (!allowed.Contains(sp))
