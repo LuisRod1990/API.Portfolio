@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PortfolioApi.Api.Controllers
 {
-//    [Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PortfolioController : ControllerBase
@@ -23,19 +23,14 @@ namespace PortfolioApi.Api.Controllers
         {
             return Ok("Success...");
         }
-        //[AllowAnonymous]
-        [HttpGet("{sp}/{usuarioId}")]
-        public async Task<IActionResult> GetData(string sp, int usuarioId)
+
+        [HttpGet]
+        public async Task<IActionResult> GetData([FromQuery] string sp, [FromQuery] int usuarioId)
         {
-            var allowed = new[] { "get_contact"
-                , "get_aptitudes"
-                , "get_experiencia"
-                , "get_skills"
-                , "get_totalexperiencia"
-                , "get_formacion"
-            };
+            var allowed = new[] { "get_contact", "get_aptitudes", "get_experiencia", "get_skills", "get_totalexperiencia", "get_formacion" };
             if (!allowed.Contains(sp))
                 return BadRequest("Stored procedure no permitida");
+
             var result = await _mediator.Send(new GetDataByStoredProcedureQuery(sp, usuarioId));
             return Ok(result);
         }

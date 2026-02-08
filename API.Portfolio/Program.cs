@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using log4net.Config;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -7,8 +8,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuración básica de log4net
+XmlConfigurator.Configure(new FileInfo("log4net.config"));
 builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
+// log4net usando el archivo de configuración
+builder.Logging.AddLog4Net("log4net.config");
+
+
 
 var connectionString = Environment.GetEnvironmentVariable("CONN") ?? "Defaults";
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? "DefaultKey";
