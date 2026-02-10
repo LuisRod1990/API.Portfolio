@@ -34,9 +34,15 @@ builder.Services.AddCors(options =>
     {
         var allowedOrigins = new List<string>
         {
+            "https://localhost",
+            "http://localhost",
             "http://localhost:4200",
+            "https://localhost:9090",
+            "https://192.168.17.59:9090",
+            "http://192.168.17.59",
             "https://portfolio-lrguez.duckdns.org",
-            "http://ec2-3-142-208-223.us-east-2.compute.amazonaws.com/"
+            "http://ec2-3-142-208-223.us-east-2.compute.amazonaws.com/",
+            corsHost
         };
         if (!string.IsNullOrEmpty(corsHost) && corsHost != "*")
         {
