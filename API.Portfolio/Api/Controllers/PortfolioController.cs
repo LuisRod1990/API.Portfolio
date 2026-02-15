@@ -2,14 +2,13 @@
 using API.Portfolio.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PortfolioApi.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/portfolio")]
     public class PortfolioController : ControllerBase
     {
         private readonly IMediator _mediator;
